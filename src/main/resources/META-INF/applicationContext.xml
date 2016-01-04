@@ -1,0 +1,55 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:property-placeholder location="classpath:app.properties,mappings/mappings.json"/>
+    <context:component-scan base-package="com.lkulig.jira.migration"/>
+    <context:annotation-config/>
+    <aop:aspectj-autoproxy/>
+
+    <bean id="sourceJiraClientConfig" class="com.lkulig.jira.migration.client.JiraClientConfig">
+        <constructor-arg index="0" value="${jira.from.user}"/>
+        <constructor-arg index="1" value="${jira.from.password}"/>
+        <constructor-arg index="2" value="${jira.from.project}"/>
+        <constructor-arg index="3" value="${jira.from.uri}"/>
+    </bean>
+
+    <bean id="destinationJiraClientConfig" class="com.lkulig.jira.migration.client.JiraClientConfig">
+        <constructor-arg index="0" value="${jira.to.user}"/>
+        <constructor-arg index="1" value="${jira.to.password}"/>
+        <constructor-arg index="2" value="${jira.to.project}"/>
+        <constructor-arg index="3" value="${jira.to.uri}"/>
+    </bean>
+
+    <bean id="jiraClientFactory" class="com.lkulig.jira.migration.client.JiraClientFactory"/>
+
+    <bean id="sourceJira" factory-bean="jiraClientFactory" factory-method="createFor" destroy-method="logout">
+        <constructor-arg ref="sourceJiraClientConfig"/>
+    </bean>
+
+    <bean id="destinationJira" factory-bean="jiraClientFactory" factory-method="createFor" destroy-method="logout">
+        <constructor-arg ref="destinationJiraClientConfig"/>
+    </bean>
+
+    <bean id="loggingAspect" class="com.lkulig.jira.migration.util.LoggingAspect"/>
+
+    <bean id="jsonFactory" class="com.fasterxml.jackson.core.JsonFactory"/>
+
+    <bean id="issueFieldsMapper" class="com.lkulig.jira.migration.domain.issue.IssueFieldsMapper">
+        <constructor-arg type="org.springframework.core.io.Resource" value="mappings/mappings.json"/>
+        <constructor-arg type="com.fasterxml.jackson.core.JsonFactory" ref="jsonFactory"/>
+    </bean>
+
+    <aop:config>
+        <aop:aspect ref="loggingAspect">
+            <aop:pointcut id="pointCutAround"
+                          expression="execution(* com.lkulig.jira.migration.service.JiraMigrationService.*(..))"/>
+            <aop:around method="monitorExportProgress" pointcut-ref="pointCutAround"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

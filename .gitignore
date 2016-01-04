@@ -1,0 +1,15 @@
+.project
+.settings
+.metadata
+.classpath
+.springBeans
+.idea/
+target/
+*.iml
+*.log
+*attlasian-ide-plugin.xml
+.checkstyle
+logs
+*pid.out.file
+app-local.properties
+.DS_Store

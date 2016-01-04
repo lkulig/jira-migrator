@@ -1,0 +1,88 @@
+{
+  "issues": [
+    {
+      "name": "Epic",
+      "typeId": 10000,
+      "customFields": [
+        {
+          "from": "customfield_10341",
+          "to": "customfield_10009",
+          "required": true,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "Task",
+      "typeId": 3,
+      "customFields": [
+        {
+          "from": "customfield_10013",
+          "to": "customfield_10005",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "Bug",
+      "typeId": 1,
+      "customFields": [
+        {
+          "from": "customfield_10013",
+          "to": "customfield_10005",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "from": "customfield_12041",
+          "to": "customfield_10101",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "from": "customfield_12040",
+          "to": "customfield_10100",
+          "required": true,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "Story",
+      "typeId": 10001,
+      "customFields": [
+        {
+          "from": "customfield_10013",
+          "to": "customfield_10005",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "Improvement",
+      "typeId": 4,
+      "customFields": [
+        {
+          "from": "customfield_10013",
+          "to": "customfield_10005",
+          "required": true,
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "New Feature",
+      "typeId": 2
+    },
+    {
+      "name": "Investigation",
+      "typeId": 3
+    },
+    {
+      "name": "Access",
+      "typeId": 3
+    }
+  ]
+}
